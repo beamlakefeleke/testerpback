@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, DatePicker, TimePicker, Button, Upload, message, Select } from 'antd';
+import { Form, Input, DatePicker, TimePicker, Button, Upload, message, Select, Row, Col } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { BACKENDURL } from '../../../helper/Urls';
@@ -24,7 +24,7 @@ const NewReportForm = ({ reload, openModalFun }) => {
                 report: values.report,
                 description: values.description,
                 reportMeasurement: values.reportMeasurement,
-                status: 'Pending', // Default status
+                status: 'PENDING', // Default status
                 attachments: fileList.map(file => file.name), // Extract file names or paths
             });
         
@@ -39,56 +39,80 @@ const NewReportForm = ({ reload, openModalFun }) => {
             setLoading(false);
         }
     };
-    
 
     return (
-        <Form onFinish={handleFinish}>
-           <Form.Item name="userId" label="User ID" rules={[{ required: true, message: 'Please input User ID!' }]}>
-    <Input />
-</Form.Item>
+            <Form onFinish={handleFinish} layout="vertical">
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item name="userId" label="User ID" rules={[{ required: true, message: 'Please input User ID!' }]}>
+                            <Input size="large" placeholder="Enter User ID" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please select a date!' }]}>
+                            <DatePicker size="large" style={{ width: '100%' }} />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-            <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please select a date!' }]}>
-                <DatePicker />
-            </Form.Item>
-            <Form.Item name="shift" label="Shift" rules={[{ required: true, message: 'Please select a shift!' }]}>
-                <TimePicker.RangePicker format="HH:mm" />
-            </Form.Item>
-            <Form.Item name="location" label="Location" rules={[{ required: true, message: 'Please input location!' }]}>
-                <Input />
-            </Form.Item>
-            <Form.Item name="report" label="Report" rules={[{ required: true, message: 'Please input report!' }]}>
-                <TextArea />
-            </Form.Item>
-            <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input a description!' }]}>
-                <TextArea />
-            </Form.Item>
-            <Form.Item name="reportMeasurement" label="Report Measurement" rules={[{ required: true, message: 'Please select report measurement!' }]}>
-                <Select placeholder="Select measurement">
-                    <Option value="High">High</Option>
-                    <Option value="Medium">Medium</Option>
-                    <Option value="Low">Low</Option>
-                </Select>
-            </Form.Item>
-            <Form.Item label="Attachments">
-                <Upload
-                    beforeUpload={(file) => {
-                        setFileList((current) => [...current, file]); // Add file to local state
-                        return false; // Prevent automatic upload
-                    }}
-                    onRemove={(file) => {
-                        setFileList((current) => current.filter(item => item.uid !== file.uid)); // Remove file from local state
-                    }}
-                    fileList={fileList} // Controlled fileList
-                >
-                    <Button icon={<UploadOutlined />}>Upload Files</Button>
-                </Upload>
-            </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit" loading={loading}>
-                    Submit
-                </Button>
-            </Form.Item>
-        </Form>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item name="shift" label="Shift" rules={[{ required: true, message: 'Please select a shift!' }]}>
+                            <TimePicker.RangePicker size="large" format="HH:mm" style={{ width: '100%' }} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="location" label="Location" rules={[{ required: true, message: 'Please input location!' }]}>
+                            <Input size="large" placeholder="Enter Location" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={24}>
+                <Col span={12}>
+                <Form.Item name="report" label="Report" rules={[{ required: true, message: 'Please input report!' }]}>
+                    <TextArea size="large" placeholder="Write your report here" rows={4} />
+                </Form.Item>
+                </Col>
+                <Col span={12}>
+                <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input a description!' }]}>
+                    <TextArea size="large" placeholder="Describe the report" rows={4} />
+                </Form.Item>
+                </Col>
+                </Row>
+                <Row gutter={24}>
+                <Col span={12}>
+                <Form.Item name="reportMeasurement" label="Report Measurement" rules={[{ required: true, message: 'Please select report measurement!' }]}>
+                    <Select size="large" placeholder="Select measurement">
+                        <Option value="HIGH">High</Option>
+                        <Option value="MID">Medium</Option>
+                        <Option value="LOW">Low</Option>
+                    </Select>
+                </Form.Item>
+                </Col>
+                <Col span={12}>
+                <Form.Item label="Attachments">
+                    <Upload
+                        beforeUpload={(file) => {
+                            setFileList((current) => [...current, file]); // Add file to local state
+                            return false; // Prevent automatic upload
+                        }}
+                        onRemove={(file) => {
+                            setFileList((current) => current.filter(item => item.uid !== file.uid)); // Remove file from local state
+                        }}
+                        fileList={fileList} // Controlled fileList
+                    >
+                        <Button icon={<UploadOutlined />} size="large">Upload Files</Button>
+                    </Upload>
+                </Form.Item>
+                </Col>
+                </Row> 
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" loading={loading} size="large" style={{ width: '20%',float: 'right' }}>
+                        Submit Report
+                    </Button>
+                </Form.Item>
+            </Form>
+        
     );
 };
 

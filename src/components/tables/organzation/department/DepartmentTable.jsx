@@ -7,6 +7,7 @@ import ModalForm from '../../../../modal/Modal';
 import { AlertContext } from '../../../../context/AlertContext';
 import { BACKENDURL } from '../../../../helper/Urls';
 import axios from 'axios';
+import EditDepartmentForm from '/src/components/forms/organzation/EditDepartmentForm';
 
 const DepartmentTable = ({branchData,loading,reload}) => {
   const {openNotification} = useContext (AlertContext);
@@ -159,7 +160,7 @@ const DepartmentTable = ({branchData,loading,reload}) => {
      key: 'operation',
      render: (r) =>
      <Space style={{display:'flex',alignItems:'center',flexWrap:"wrap"}}>
-     <Button type='text' onClick={() =>{setModalOpen (true);setModalContent(r.IDNO)}}><MdEdit/></Button>
+     <Button type='text' onClick={() =>{setModalOpen (true);setModalContent(r)}}><MdEdit/></Button>
      <Popconfirm title='Are you sure, Close Department' onConfirm={()=>CloseDepartment(r.id)}><Button type='text' disabled={deleteLoading} loading={deleteLoading}><MdDelete color='red'/></Button></Popconfirm>
      </Space>
     },
@@ -172,9 +173,15 @@ const DepartmentTable = ({branchData,loading,reload}) => {
           open={modalOpen}
           close={() => setModalOpen (false)}
           title={<Divider>Update Department Form</Divider>}
-          content={
+          content={ modalContent && (
+                        <EditDepartmentForm
+                        departmentData={modalContent}
+                          reload={reload}
+                          openModalFun={(e) => setModalOpen(e)}
+                        />
+                      )
           // <UpdateUserForm id={modalContent} reload={()=>reload()} openModalFun={(e) => setModalOpen (e)}/>
-        ''  
+         
         }
         />
     <Table

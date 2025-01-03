@@ -7,6 +7,7 @@ import ModalForm from '../../../../modal/Modal';
 import { AlertContext } from '../../../../context/AlertContext';
 import { BACKENDURL } from '../../../../helper/Urls';
 import axios from 'axios';
+import EditPositionForm from '/src/components/forms/organzation/EditPositionForm';
 
 const PostionTable = ({branchData,loading,reload}) => {
   const {openNotification} = useContext (AlertContext);
@@ -165,7 +166,7 @@ const PostionTable = ({branchData,loading,reload}) => {
      key: 'operation',
      render: (r) =>
      <Space style={{display:'flex',alignItems:'center',flexWrap:"wrap"}}>
-     <Button type='text' onClick={() =>{setModalOpen (true);setModalContent(r.IDNO)}}><MdEdit/></Button>
+     <Button type='text' onClick={() =>{setModalOpen (true);setModalContent(r)}}><MdEdit/></Button>
      <Popconfirm title='Are you sure, Close Position' onConfirm={()=>DeleteUser(r.IDNO)}><Button type='text' disabled={deleteLoading} loading={deleteLoading}><MdDelete color='red'/></Button></Popconfirm>
      </Space>
     },
@@ -178,7 +179,15 @@ const PostionTable = ({branchData,loading,reload}) => {
           open={modalOpen}
           close={() => setModalOpen (false)}
           title={<Divider>Update Position Form</Divider>}
-          content={''}
+          content={
+            modalContent && (
+              <EditPositionForm
+                Data={modalContent}
+                reload={reload}
+                openModalFun={(e) => setModalOpen(e)}
+              />
+            )
+          }
         />
     <Table
       size='small'
